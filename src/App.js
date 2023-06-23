@@ -1,22 +1,45 @@
-import { Link } from "react-router-dom";
-import useAxios from './useAxios'
-function App() {
-  const [data, error, loading] = useAxios();
-  return (
-    <>
-      {error && (<p>There was an error</p>)}
-      {loading && (<p>Loading...</p>)}
-      {data && (<>
-        {data.animals.map((animal) => (
-          <Link to={`/detailview/${animal.id}`} key={animal.id}>
-            <h3>{animal.name}</h3>
-          </Link>
-        ))}
-      </>
-      )
-      }
-    </>
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider
+} from 'react-router-dom'
+
+// pages
+import Details from './pages/Details'
+import Guide from './pages/Guide'
+import NotFound from './pages/NotFound'
+import Pets from './pages/Pets'
+
+// layouts
+import RootLayout from './layouts/RootLayout'
+import PetsLayout from './layouts/PetsLayout'
+import PetsError from './pages/PetsError'
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<RootLayout />}>
+      <Route index element={<Guide />} />
+      <Route path="pets" element={<PetsLayout />} errorElement={<PetsError />}>
+        <Route
+          index
+          element={<Pets />}
+        // errorElement={<CareersError />}
+        />
+        <Route
+          path=":id"
+          element={<Details />}
+        />
+      </Route>
+      <Route path="*" element={<NotFound />} />
+    </Route>
   )
+)
+
+function App() {
+  return (
+    <RouterProvider router={router} />
+  );
 }
 
-export default App;
+export default App
