@@ -2,7 +2,6 @@ import useAxios from './useAxios'
 import { Link } from 'react-router-dom'
 export default function Pets() {
     const [data, error, loading] = useAxios()
-    console.log('-------------------------', data)
     return (
         <div className='pets'>
             {error && 
